@@ -78,14 +78,14 @@ async function main() {
     { electionCode: 'LIRA_LC3_2026', ballotNumber: 3, name: 'Nyeko Rose', party: 'UPC' }
   ]);
 
-  const users = await createMany(User, [
-    { name: 'National Admin', email: 'admin@lira-tally.test', passwordHash, role: 'national_admin', DistrictId: district.id, allowedSubnets: '127.0.0.1/32,::1/128' },
-    { name: 'Lira DRO', email: 'dro@lira-tally.test', passwordHash, role: 'district_returning_officer', DistrictId: district.id, allowedSubnets: '127.0.0.1/32,::1/128' },
-    { name: 'City East Supervisor', email: 'supervisor@lira-tally.test', passwordHash, role: 'constituency_supervisor', DistrictId: district.id, ConstituencyId: east.id, allowedSubnets: '127.0.0.1/32,::1/128' },
-    { name: 'Adyel Polling Officer', email: 'officer@lira-tally.test', passwordHash, role: 'polling_officer', DistrictId: district.id, ConstituencyId: east.id, StationId: stations[0].id, allowedSubnets: '127.0.0.1/32,::1/128' },
-    { name: 'Election Observer', email: 'observer@lira-tally.test', passwordHash, role: 'observer', DistrictId: district.id, allowedSubnets: '127.0.0.1/32,::1/128' },
-    { name: 'Audit Clerk', email: 'auditor@lira-tally.test', passwordHash, role: 'auditor', DistrictId: district.id, allowedSubnets: '127.0.0.1/32,::1/128' }
-  ]);
+const users = await createMany(User, [
+  { name: 'National Admin', email: 'admin@lira-tally.test', passwordHash, role: 'national_admin', DistrictId: district.id, allowedSubnets: '' },
+  { name: 'Lira DRO', email: 'dro@lira-tally.test', passwordHash, role: 'district_returning_officer', DistrictId: district.id, allowedSubnets: '' },
+  { name: 'City East Supervisor', email: 'supervisor@lira-tally.test', passwordHash, role: 'constituency_supervisor', DistrictId: district.id, ConstituencyId: east.id, allowedSubnets: '' },
+  { name: 'Adyel Polling Officer', email: 'officer@lira-tally.test', passwordHash, role: 'polling_officer', DistrictId: district.id, ConstituencyId: east.id, StationId: stations[0].id, allowedSubnets: '' },
+  { name: 'Election Observer', email: 'observer@lira-tally.test', passwordHash, role: 'observer', DistrictId: district.id, allowedSubnets: '' },
+  { name: 'Audit Clerk', email: 'auditor@lira-tally.test', passwordHash, role: 'auditor', DistrictId: district.id, allowedSubnets: '' }
+]);
 
   const admin = users[0];
   const reviewer = users[1];
