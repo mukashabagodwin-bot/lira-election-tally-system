@@ -1,0 +1,28 @@
+<%- include('../partials/top') %>
+<section class="page-heading">
+  <div>
+    <h1>Polling stations</h1>
+    <p>Registered voters, constituency boundaries, and submission state</p>
+  </div>
+</section>
+<section class="panel">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Code</th><th>Station</th><th>Parish</th><th>Constituency</th><th>Registered voters</th><th>Status</th><th>Batches</th></tr></thead>
+      <tbody>
+        <% stations.forEach((station) => { %>
+          <tr>
+            <td><%= station.code %></td>
+            <td><%= station.name %></td>
+            <td><%= station.parish %></td>
+            <td><%= station.Constituency.name %></td>
+            <td><%= station.registeredVoters.toLocaleString() %></td>
+            <td><span class="status <%= station.status %>"><%= station.status %></span></td>
+            <td><%= station.TallyBatches ? station.TallyBatches.length : 0 %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('../partials/bottom') %>

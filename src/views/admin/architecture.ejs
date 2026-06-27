@@ -1,0 +1,28 @@
+<%- include('../partials/top') %>
+<section class="page-heading">
+  <div>
+    <h1>Architecture</h1>
+    <p><%= architecture.architectureStyle %></p>
+  </div>
+</section>
+<section class="dashboard-grid">
+  <div class="panel">
+    <h2>Bounded contexts</h2>
+    <ul class="plain-list">
+      <% architecture.boundedContexts.forEach((item) => { %><li><%= item %></li><% }) %>
+    </ul>
+  </div>
+  <div class="panel">
+    <h2>Scalable layers</h2>
+    <ul class="plain-list">
+      <% architecture.scalableLayers.forEach((item) => { %><li><%= item %></li><% }) %>
+    </ul>
+  </div>
+</section>
+<section class="panel">
+  <h2>Index strategy</h2>
+  <ul class="plain-list">
+    <% relationalStrategy.indexes.forEach((item) => { %><li><%= item %></li><% }) %>
+  </ul>
+</section>
+<%- include('../partials/bottom') %>

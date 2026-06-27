@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: lira-election-tally
+    env: node
+    plan: starter
+    buildCommand: npm ci && npm run seed
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: COOKIE_SECURE
+        value: true
+      - key: SESSION_SECRET
+        generateValue: true

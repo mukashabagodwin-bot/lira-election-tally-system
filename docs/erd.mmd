@@ -1,0 +1,10 @@
+erDiagram
+  DISTRICTS ||--o{ CONSTITUENCIES : contains
+  CONSTITUENCIES ||--o{ STATIONS : contains
+  STATIONS ||--o{ TALLY_BATCHES : receives
+  USERS ||--o{ TALLY_BATCHES : submits
+  USERS ||--o{ AUDIT_LOGS : creates
+  TALLY_BATCHES ||--o{ TALLY_LINES : includes
+  CANDIDATES ||--o{ TALLY_LINES : receives
+  TALLY_BATCHES ||--o{ EVENT_OUTBOX : emits
+  IDEMPOTENCY_KEYS ||--o{ TALLY_BATCHES : protects

@@ -1,0 +1,46 @@
+<%- include('../partials/top') %>
+<section class="page-heading">
+  <div>
+    <h1>Tally batch #<%= batch.id %></h1>
+    <p><%= electionLabel %> - <%= batch.Station.code %> - <%= batch.Station.name %></p>
+  </div>
+  <span class="status <%= batch.status %>"><%= batch.status %></span>
+</section>
+<section class="metric-grid">
+  <article class="metric"><span>Valid votes</span><strong><%= batch.totalValidVotes.toLocaleString() %></strong></article>
+  <article class="metric"><span>Rejected ballots</span><strong><%= batch.invalidVotes.toLocaleString() %></strong></article>
+  <article class="metric"><span>Total votes</span><strong><%= batch.totalVotes.toLocaleString() %></strong></article>
+  <article class="metric"><span>Version</span><strong><%= batch.batchVersion %></strong></article>
+</section>
+<section class="panel">
+  <h2>Candidate lines</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Ballot</th><th>Candidate</th><th>Party</th><th>Votes</th></tr></thead>
+      <tbody>
+        <% batch.TallyLines.forEach((line) => { %>
+          <tr><td><%= line.Candidate.ballotNumber %></td><td><%= line.Candidate.name %></td><td><%= line.Candidate.party %></td><td><%= line.votes.toLocaleString() %></td></tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<section class="panel detail-panel">
+  <h2>Rejected ballot reasons</h2>
+  <% const rejectedRows = batch.RejectedBallots || []; %>
+  <% if (rejectedRows.length) { %>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>No.</th><th>Reason</th><th>Note</th></tr></thead>
+        <tbody>
+          <% rejectedRows.forEach((ballot) => { %>
+            <tr><td><%= ballot.sequenceNumber %></td><td><%= ballot.reason %></td><td><%= ballot.note || '' %></td></tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <p>No rejected ballots recorded for this batch.</p>
+  <% } %>
+</section>
+<%- include('../partials/bottom') %>

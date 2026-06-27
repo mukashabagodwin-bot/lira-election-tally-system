@@ -1,0 +1,8 @@
+<%- include('partials/top') %>
+<section class="panel narrow">
+  <h1><%= title %></h1>
+  <p><%= message %></p>
+  <% if (typeof traceId !== 'undefined' && traceId) { %><p class="muted">Trace ID: <%= traceId %></p><% } %>
+  <a class="button-link" href="/">Return to dashboard</a>
+</section>
+<%- include('partials/bottom') %>

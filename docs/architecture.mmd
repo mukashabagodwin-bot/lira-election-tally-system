@@ -1,0 +1,18 @@
+flowchart LR
+  Officer[Polling officer browser] --> Gateway[Kong or Envoy API gateway]
+  Supervisor[Supervisor browser] --> Gateway
+  Observer[Observer dashboard] --> Gateway
+  Gateway --> Smooth[Token bucket and leaky bucket]
+  Smooth --> MVC[Express MVC controllers]
+  MVC --> Auth[Zero trust auth filters]
+  Auth --> Commands[Command use cases]
+  Auth --> Queries[Query use cases]
+  Commands --> Domain[Domain rules]
+  Domain --> ORM[Sequelize repositories]
+  Queries --> ORM
+  ORM --> SQL[(SQLite local or PostgreSQL cloud)]
+  Commands --> Outbox[(Event outbox)]
+  Commands --> Audit[(JSON audit log)]
+  Gateway --> Trace[Traceparent and source IP]
+  Outbox --> Bus[Future message bus]
+  Bus --> Reports[Analytics, HDFS archive, notifications]

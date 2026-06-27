@@ -1,0 +1,94 @@
+<%- include('../partials/top') %>
+<section class="page-heading">
+  <div>
+    <h1>Election dashboard</h1>
+    <p><%= selectedElection.label %></p>
+  </div>
+  <a class="button-link" href="/api/metrics?electionCode=<%= selectedElection.code %>">Metrics API</a>
+</section>
+
+<form method="get" action="/" class="panel form-grid scheme-selector">
+  <label>Election scheme
+    <select name="electionCode" onchange="this.form.submit()">
+      <% electionSchemes.forEach((scheme) => { %>
+        <option value="<%= scheme.code %>" <%= scheme.code === selectedElection.code ? 'selected' : '' %>><%= scheme.label %></option>
+      <% }) %>
+    </select>
+  </label>
+  <noscript><button class="button-link" type="submit">Load dashboard</button></noscript>
+</form>
+
+<section class="metric-grid" aria-label="Key metrics">
+  <article class="metric"><span>Stations</span><strong><%= metrics.cards.stations %></strong></article>
+  <article class="metric"><span>Registered voters</span><strong><%= metrics.cards.registeredVoters.toLocaleString() %></strong></article>
+  <article class="metric"><span>Verified votes</span><strong><%= metrics.cards.verifiedVotes.toLocaleString() %></strong></article>
+  <article class="metric"><span>Turnout</span><strong><%= metrics.cards.turnoutPercent %>%</strong></article>
+  <article class="metric"><span>Rejected ballots</span><strong><%= metrics.cards.rejectedBallots.toLocaleString() %></strong></article>
+  <article class="metric"><span>Pending batches</span><strong><%= metrics.cards.pendingBatches %></strong></article>
+  <article class="metric"><span>Rejected batches</span><strong><%= metrics.cards.rejectedBatches %></strong></article>
+</section>
+
+<section class="dashboard-grid">
+  <div class="panel">
+    <h2>Candidate totals</h2>
+    <canvas id="candidateChart" width="640" height="320" data-points='<%- JSON.stringify(metrics.candidateTotals) %>'></canvas>
+  </div>
+  <div class="panel">
+    <h2>Turnout by polling station</h2>
+    <canvas id="turnoutChart" width="640" height="320" data-points='<%- JSON.stringify(metrics.turnoutByStation) %>'></canvas>
+  </div>
+  <div class="panel">
+    <h2>Rejected votes by reason</h2>
+    <canvas id="rejectedReasonChart" width="640" height="320" data-points='<%- JSON.stringify(metrics.rejectedByReason) %>'></canvas>
+  </div>
+  <div class="panel">
+    <h2>Batch status</h2>
+    <canvas id="batchStatusChart" width="640" height="320" data-points='<%- JSON.stringify(metrics.batchStatusTotals) %>'></canvas>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Rejected votes by station</h2>
+  <% if (metrics.rejectedByStation.length) { %>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Station</th><th>Constituency</th><th>Rejected ballots</th></tr></thead>
+        <tbody>
+          <% metrics.rejectedByStation.forEach((row) => { %>
+            <tr>
+              <td><%= row.code %> - <%= row.station %></td>
+              <td><%= row.constituency %></td>
+              <td><%= row.count.toLocaleString() %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <p>No rejected votes recorded in verified batches.</p>
+  <% } %>
+</section>
+
+<section class="panel detail-panel">
+  <h2>Recent batches</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Station</th><th>Constituency</th><th>Status</th><th>Total votes</th><th>Rejected ballots</th><th>Submitted by</th></tr></thead>
+      <tbody>
+        <% metrics.recentBatches.forEach((batch) => { %>
+          <tr>
+            <td><a href="/tallies/<%= batch.id %>">#<%= batch.id %></a></td>
+            <td><%= batch.station %></td>
+            <td><%= batch.constituency %></td>
+            <td><span class="status <%= batch.status %>"><%= batch.status %></span></td>
+            <td><%= batch.totalVotes.toLocaleString() %></td>
+            <td><%= batch.rejectedVotes.toLocaleString() %></td>
+            <td><%= batch.submittedBy %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<script src="/js/dashboard.js"></script>
+<%- include('../partials/bottom') %>

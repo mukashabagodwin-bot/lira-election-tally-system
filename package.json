@@ -1,0 +1,33 @@
+{
+  "name": "lira-election-tally-system",
+  "version": "1.0.0",
+  "description": "Project 32: Decentralized election tally entry system for Lira with validation, RBAC/ABAC, audit logs, and tally metrics.",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "seed": "node scripts/seed.js",
+    "db:reset": "node scripts/reset-db.js",
+    "check": "node scripts/smoke-check.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-session-sequelize": "^6.1.1",
+    "csurf": "^1.2.2",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "helmet": "^7.1.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "sequelize": "^3.30.0",
+    "sqlite3": "^6.0.1",
+    "uuid": "^14.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

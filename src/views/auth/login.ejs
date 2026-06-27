@@ -1,0 +1,15 @@
+<%- include('../partials/top') %>
+<section class="auth-wrap">
+  <form class="auth-panel" method="post" action="/login">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <h1>Sign in</h1>
+    <label>Email
+      <input name="email" type="email" autocomplete="username" required autofocus>
+    </label>
+    <label>Password
+      <input name="password" type="password" autocomplete="current-password" required>
+    </label>
+    <button class="primary" type="submit">Sign in</button>
+  </form>
+</section>
+<%- include('../partials/bottom') %>

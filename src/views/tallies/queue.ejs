@@ -1,0 +1,45 @@
+<%- include('../partials/top') %>
+<section class="page-heading">
+  <div>
+    <h1>Verification queue</h1>
+    <p>Pending station batches requiring supervisor review</p>
+  </div>
+</section>
+<section class="panel">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Batch</th><th>Election</th><th>Station</th><th>Votes</th><th>Rejected ballots</th><th>Submitted by</th><th>Candidate lines</th><th>Decision</th></tr></thead>
+      <tbody>
+        <% batches.forEach((batch) => { %>
+          <tr>
+            <td><a href="/tallies/<%= batch.id %>">#<%= batch.id %></a></td>
+            <td><%= electionLabel(batch.electionCode) %></td>
+            <td><%= batch.Station.code %> - <%= batch.Station.name %></td>
+            <td><%= batch.totalVotes.toLocaleString() %></td>
+            <td>
+              <strong><%= batch.invalidVotes.toLocaleString() %></strong>
+              <% (batch.RejectedBallots || []).slice(0, 3).forEach((ballot) => { %>
+                <span class="line-pill"><%= ballot.reason %></span>
+              <% }) %>
+            </td>
+            <td><%= batch.submittedBy.name %></td>
+            <td>
+              <% batch.TallyLines.forEach((line) => { %>
+                <span class="line-pill"><%= line.Candidate.name %>: <%= line.votes %></span>
+              <% }) %>
+            </td>
+            <td>
+              <form method="post" action="/tallies/<%= batch.id %>/review" class="decision-form">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input name="reason" placeholder="Reason if rejected">
+                <button name="decision" value="verify" class="primary small" type="submit">Verify</button>
+                <button name="decision" value="reject" class="danger small" type="submit">Reject</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('../partials/bottom') %>

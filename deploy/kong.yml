@@ -1,0 +1,22 @@
+_format_version: "3.0"
+services:
+  - name: lira-election-api
+    url: http://lira-election-app:3000
+    routes:
+      - name: lira-election-web
+        paths:
+          - /
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 120
+          policy: local
+      - name: correlation-id
+        config:
+          header_name: x-request-id
+          generator: uuid
+      - name: ip-restriction
+        config:
+          allow:
+            - 127.0.0.1
+            - 10.0.0.0/8

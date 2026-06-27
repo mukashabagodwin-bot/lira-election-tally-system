@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> - Lira Election Tally</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<%
+  const currentUser = typeof user !== 'undefined' ? user : null;
+  const currentPath = typeof path !== 'undefined' ? path : '';
+  const currentCsrfToken = typeof csrfToken !== 'undefined' ? csrfToken : '';
+  const currentFlash = typeof flash !== 'undefined' ? flash : null;
+%>
+<header class="topbar">
+  <a class="brand" href="/">Lira Election Tally</a>
+  <% if (currentUser) { %>
+    <nav class="navlinks" aria-label="Primary navigation">
+      <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Dashboard</a>
+      <a href="/stations" class="<%= currentPath === '/stations' ? 'active' : '' %>">Stations</a>
+      <% if (['polling_officer', 'national_admin'].includes(currentUser.role)) { %><a href="/tallies/new">Enter tally</a><% } %>
+      <% if (['constituency_supervisor', 'district_returning_officer', 'national_admin'].includes(currentUser.role)) { %><a href="/tallies/queue">Verify</a><% } %>
+      <% if (['auditor', 'national_admin'].includes(currentUser.role)) { %><a href="/admin/audit">Audit</a><% } %>
+      <% if (currentUser.role === 'national_admin') { %><a href="/admin/architecture">Architecture</a><% } %>
+    </nav>
+    <form method="post" action="/logout" class="logout-form">
+      <input type="hidden" name="_csrf" value="<%= currentCsrfToken %>">
+      <span class="user-chip"><%= currentUser.name %> - <%= currentUser.role.replaceAll('_', ' ') %></span>
+      <button class="icon-button" type="submit" aria-label="Sign out" title="Sign out">Exit</button>
+    </form>
+  <% } %>
+</header>
+<main class="page">
+  <% if (currentFlash) { %><div class="flash <%= currentFlash.type %>"><%= currentFlash.message %></div><% } %>

@@ -1,0 +1,66 @@
+<%- include('../partials/top') %>
+<section class="page-heading">
+  <div>
+    <h1>Enter station tally</h1>
+    <p><%= selectedElection.label %></p>
+  </div>
+</section>
+<form method="get" action="/tallies/new" class="panel form-grid scheme-selector">
+  <label>Election scheme
+    <select name="electionCode" onchange="this.form.submit()">
+      <% electionSchemes.forEach((scheme) => { %>
+        <option value="<%= scheme.code %>" <%= scheme.code === selectedElection.code ? 'selected' : '' %>><%= scheme.label %></option>
+      <% }) %>
+    </select>
+  </label>
+  <noscript><button class="button-link" type="submit">Load candidates</button></noscript>
+</form>
+<form method="post" action="/tallies" class="panel form-grid tally-entry-form">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <input type="hidden" name="electionCode" value="<%= selectedElection.code %>">
+  <label>Polling station
+    <select name="stationId" required>
+      <% stations.forEach((station) => { %>
+        <option value="<%= station.id %>"><%= station.code %> - <%= station.name %> (<%= station.Constituency.name %>)</option>
+      <% }) %>
+    </select>
+  </label>
+  <div class="candidate-lines">
+    <% candidates.forEach((candidate, index) => { %>
+      <label><%= candidate.ballotNumber %>. <%= candidate.name %> - <%= candidate.party %>
+        <input type="hidden" name="lines[<%= index %>][candidateId]" value="<%= candidate.id %>">
+        <input name="lines[<%= index %>][votes]" type="number" min="0" value="0" required>
+      </label>
+    <% }) %>
+  </div>
+  <section class="rejected-ballots" aria-labelledby="rejectedBallotsHeading">
+    <div class="section-title-row">
+      <h2 id="rejectedBallotsHeading">Rejected ballots</h2>
+      <button type="button" class="button-link small" id="addRejectedBallot">Add rejected vote</button>
+    </div>
+    <div id="rejectedBallotRows" class="rejected-ballot-rows"></div>
+    <template id="rejectedBallotTemplate">
+      <div class="rejected-ballot-row">
+        <span class="row-number">#</span>
+        <label>Reason
+          <select name="rejectedBallots[__index__][reason]" required>
+            <option value="">Select reason</option>
+            <% rejectedReasonOptions.forEach((reason) => { %>
+              <option value="<%= reason %>"><%= reason %></option>
+            <% }) %>
+          </select>
+        </label>
+        <label>Note
+          <input name="rejectedBallots[__index__][note]" maxlength="180" placeholder="Optional note">
+        </label>
+        <button type="button" class="button-link small remove-rejected-ballot">Remove</button>
+      </div>
+    </template>
+  </section>
+  <div class="form-actions">
+    <button class="primary" type="submit">Submit tally</button>
+    <a class="button-link" href="/">Cancel</a>
+  </div>
+</form>
+<script src="/js/tallyForm.js"></script>
+<%- include('../partials/bottom') %>

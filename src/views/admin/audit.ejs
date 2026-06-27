@@ -1,0 +1,40 @@
+<%- include('../partials/top') %>
+<section class="page-heading">
+  <div>
+    <h1>Audit trail</h1>
+    <p>Traceable JSON security and tally events</p>
+  </div>
+</section>
+<section class="panel">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Time</th><th>Actor</th><th>Role</th><th>Action</th><th>Entity</th><th>Source IP</th><th>Trace</th></tr></thead>
+      <tbody>
+        <% logs.forEach((log) => { %>
+          <%
+            const rawTime = log.createdAt || log.created_at;
+            const parsedTime = rawTime ? new Date(rawTime) : null;
+            const displayTime = parsedTime && !Number.isNaN(parsedTime.getTime())
+              ? parsedTime.toISOString().slice(0, 19).replace('T', ' ')
+              : 'Unknown';
+            const actorName = log.actor ? log.actor.name : (log.User ? log.User.name : 'System');
+            const rawSourceIp = log.sourceIp || log.source_ip || 'Unknown';
+            const displaySourceIp = rawSourceIp === '::1' || rawSourceIp === '::ffff:127.0.0.1'
+              ? '127.0.0.1 (localhost)'
+              : rawSourceIp;
+          %>
+          <tr>
+            <td><%= displayTime %></td>
+            <td><%= actorName %></td>
+            <td><%= log.role %></td>
+            <td><%= log.action %></td>
+            <td><%= log.entity %> <%= log.entityId ? '#' + log.entityId : '' %></td>
+            <td><%= displaySourceIp %></td>
+            <td><code><%= log.traceId %></code></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('../partials/bottom') %>
